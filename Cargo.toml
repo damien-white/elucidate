@@ -1,0 +1,29 @@
+[package]
+name = "elucidate"
+version = "0.1.0"
+edition = "2021"
+description = "JSON parser"
+repository = "https://github.com/dark-fusion/elucidate"
+license = "MIT OR Apache-2.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nom = "7.1.1"
+
+[profile.bench]
+debug = true
+lto = true
+codegen-units = 1
+
+[profile.dev]
+# Disabling debug info speeds up builds a bunch,
+# and we don't rely on it for debugging that much.
+debug = 0
+# For faster builds on MacOS with incremental building enabled
+split-debuginfo = "unpacked"
+
+[profile.release]
+incremental = true
+debug = 0 # Set this to 1 or 2 to get more useful backtraces in debugger.
+lto = true

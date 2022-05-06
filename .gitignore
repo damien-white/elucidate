@@ -1,0 +1,38 @@
+### Elucidate
+
+## Rust
+# Build artifacts / Cargo
+/target
+.cargo-ok
+Cargo.lock
+**/*.rs.bk
+
+## Local Development
+# Environment variables
+.env
+.env*
+!.env.example
+
+# Direnv scripts
+.envrc*
+
+# Mock data
+mock/
+
+## Telemetry and Logging
+# Logs
+logs/
+
+## IDEs and Editors
+# JetBrains
+.idea/
+
+# VSCode
+.vscode/*
+
+## Miscellaneous
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
