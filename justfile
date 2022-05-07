@@ -1,5 +1,6 @@
 # Comment / uncomment the following line to view backtraces
 export RUST_BACKTRACE := "1"
+export RUSTDOCFLAGS := "-D warnings"
 
 # Default to show all available commands if no arguments passed
 _default:
@@ -13,6 +14,10 @@ _default:
 @compile:
     cargo fmt --all
     cargo clippy -- -D warnings
+
+# Build the documentation for the crate
+@doc:
+    cargo +nightly doc --no-deps --document-private-items --all-features --workspace --verbose
 
 # Format the project with rustfmt
 @format:
