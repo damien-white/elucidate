@@ -8,7 +8,7 @@
 
 </div>
 
-`elucidate` is a powerful JSON parser built to fast, efficient and correct.
+`elucidate` is a high-performance JSON parser for correctly handling arbitrary data.
 
 The official documentation can be found in the [crate's documentation][docs-rs].
 

@@ -2,7 +2,7 @@
 name = "elucidate"
 version = "0.1.0"
 edition = "2021"
-description = "JSON parser"
+description = "High-performance JSON parser for correctly handling arbitrary data"
 repository = "https://github.com/dark-fusion/elucidate"
 license = "MIT"
 authors = ["Peter Donovan <peter@darkfusion.io>"]
