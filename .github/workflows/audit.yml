@@ -1,14 +1,16 @@
-name: Security audit
+name: Audit # Security audit
 
 on:
   schedule:
-    # Runs at 00:00 UTC everyday
-    - cron: '0 0 * * *'
+    # Runs at 05:43 UTC Monday-Friday
+    - cron: '43 5 * * 1-5'
   push:
     paths:
       - '**/Cargo.toml'
       - '**/Cargo.lock'
   pull_request:
+    branches:
+      - main
 
 jobs:
   audit:
@@ -27,4 +29,3 @@ jobs:
       - uses: actions-rs/audit-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-

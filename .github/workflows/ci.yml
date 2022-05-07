@@ -1,19 +1,22 @@
 name: CI # Continuous Integration
 
+env:
+  CARGO_TERM_COLOR: always
+
 on:
   push:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
-
   test:
     name: Test Suite
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -30,8 +33,7 @@ jobs:
     name: Rustfmt
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -50,8 +52,7 @@ jobs:
     name: Clippy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -66,33 +67,28 @@ jobs:
           command: clippy
           args: --all-targets --all-features --workspace -- -D warnings
 
-  docs:
-    name: Docs
+  doc:
+    name: Build docs
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           profile: minimal
           override: true
       - uses: Swatinem/rust-cache@v1
-      - name: Check documentation
+      - name: Create cargo docs
         env:
           RUSTDOCFLAGS: -D warnings
-        uses: actions-rs/cargo@v1
-        with:
-          command: doc
-          args: --no-deps --document-private-items --all-features --workspace --examples
+        run: cargo doc --no-deps --document-private-items --all-features --workspace --verbose
 
   publish-dry-run:
     name: Publish dry run
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -109,8 +105,7 @@ jobs:
     name: Code coverage
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -129,4 +124,3 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: './lcov.info'
-
