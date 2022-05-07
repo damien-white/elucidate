@@ -8,17 +8,14 @@
 
 </div>
 
-## Description
+`elucidate` is a powerful JSON parser built to fast, efficient and correct.
 
-`elucidate` is a powerful __JSON__ parser built to be fast, efficient and correct. It readily parses
-completely arbitrary JSON data, no matter who or where it comes from.
+The official documentation can be found in the [crate's documentation][docs-rs].
 
-`elucidate` considers any and all input data to be untrusted and therefore does not include any
-features related to code execution. Please refer to the [security] section for more details.
+## Project Description
 
-`elucidate` is currently in very early development. Some things are naturally in flux, but the
-vision of the project is not.
-This library is being built to allow end-users to:
+Since the project is currently in very early development, some things are naturally in flux. The
+goals of the project at this time are aimed around allowing end-users to:
 
 - Create custom JSON data pipelines
 - Validate and transform JSON data
@@ -36,20 +33,19 @@ product (MVP). The scope of the project is intentionally as small as possible.
 
 - [ ] Parse JSON data types as defined in [RFC 8259][rfc-8259].
     - [ ] array
-    - [ ] boolean
-    - [ ] null
+    - [X] boolean
+    - [X] null
     - [ ] number
     - [ ] object
     - [ ] string
+- [ ] Handle structured data such as `Record` entries (key-value pairs)
+- [ ] Convert, transform or normalize strings containing escape codes
 - [ ] Create **Reader** and **Writer** APIs
     - [ ] Implement async-compatible extension traits
 
-**Please note**: Optimizations will be made wherever possible but will be "best-effort" until an MVP
-is released.
-
 ## Design Choices
 
-### Rust
+### Language
 
 [Rust](https://rust-lang.org/) was chosen for its high-performance at runtime, resource
 efficiency and memory-safety guarantees. It also provides very useful language constructs such as
@@ -64,12 +60,11 @@ parsing functions.
 
 Parser combinators offer a unique degree of flexibility that is particularly suited to parsing JSON.
 They provide solutions for handling
-minute details and oddities and operate at similar speeds of hand-written
+minute details and oddities and operate at similar speeds of handwritten
 parsers.
 
-Contrary to popular belief, writing a JSON parser is not a simple task. Due to
-the [ambiguities present in the official specification][parsing-json-abiguities], of
-Writing a JSON parser is notoriously difficult _to get right_. Unfortunately, the
+Writing a JSON parser is notoriously difficult _to get right_ due to
+the [ambiguities present in the official specification][parsing-json-abiguities]. Unfortunately, the
 original [RFC][rfc-8259] is quite vague. The impact this has had on software designed to
 parse the format is significant.
 
@@ -82,8 +77,6 @@ This project depends on a few well-maintained crates:
 ## License
 
 Licensed under the [MIT License](/LICENSE):
-
-- You may also find a copy at http://opensource.org/licenses/MIT
 
 ## Contribution
 
@@ -101,6 +94,8 @@ We would like to give a special thanks to the following people and organizations
 parsing JSON.
 
 <!-- External links -->
+
+[docs-rs]: https://docs.rs/elucidate/latest/elucidate
 
 [rfc-8259]: https://datatracker.ietf.org/doc/html/rfc8259
 
