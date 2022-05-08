@@ -9,8 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Parsers for extracting the `number` data type into `Integer` and `Float` types.
+    - JSON makes no distinction between signed, unsigned and float values.
+    - Rust treats these types differently, so `Integer` and `Float` are handled separately.
 - Full test coverage for all existing parser functions.
-- Helper function (currently within the test module) for creating `nom` errors
+- Helper function (currently within the test module) for creating `nom` errors.
 - Custom Rust compiler flags including platform-specific linker configurations.
 
 ### Changed

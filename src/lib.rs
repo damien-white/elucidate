@@ -16,9 +16,9 @@
 
 use nom::branch::alt;
 use nom::bytes::complete::tag;
-use nom::character::complete::{digit0, one_of};
+use nom::character::complete::{digit0, digit1, one_of};
 use nom::combinator::{map_res, opt, recognize, value};
-use nom::sequence::pair;
+use nom::sequence::{pair, tuple};
 use nom::IResult;
 
 use Value::*;
@@ -49,14 +49,24 @@ pub fn null(input: &str) -> IResult<&str, Value> {
 
 /// Parses a JSON **number** as an `integer` value.
 pub fn integer(input: &str) -> IResult<&str, Value> {
-    let parser = recognize(pair(opt(tag("-")), unsigned_integer));
-    map_res(parser, |s| s.parse::<i64>().map(Integer))(input)
+    map_res(
+        recognize(pair(opt(tag("-")), unsigned_integer)),
+        |val: &str| val.parse::<i64>().map(Integer),
+    )(input)
 }
 
 // Parses a JSON `number` as a **float** value.
-// pub fn float(input: &str) -> IResult<&str, &Value> {
-//     let parser =
-// }
+pub fn float(input: &str) -> IResult<&str, Value> {
+    map_res(
+        recognize(tuple((
+            opt(tag("-")),
+            unsigned_integer,
+            opt(recognize(pair(tag("."), digit1))),
+            opt(recognize(tuple((tag("e"), opt(alt((tag("-"), tag("+")))))))),
+        ))),
+        |val: &str| val.parse().map(Float),
+    )(input)
+}
 
 /// Parses an unsigned integer value.
 pub(crate) fn unsigned_integer(input: &str) -> IResult<&str, &str> {
@@ -70,6 +80,8 @@ pub(crate) fn nonzero_digit(input: &str) -> IResult<&str, char> {
 
 #[cfg(test)]
 mod tests {
+    use std::assert_eq;
+
     use nom::error::{Error, ErrorKind};
     use nom::Err;
 
@@ -129,5 +141,19 @@ mod tests {
             integer("9223372036854775808"),
             Err(make_nom_error("9223372036854775808", ErrorKind::MapRes))
         );
+    }
+
+    #[test]
+    fn parses_float_values() {
+        assert_eq!(float("456.7xyz"), Ok(("xyz", Float(456.7))));
+        assert_eq!(float("00000XXX"), Ok(("0000XXX", Float(0.0000))));
+        assert_eq!(float("0123456789xyz"), Ok(("123456789xyz", Float(0.0))));
+        assert_eq!(float("-500.98"), Ok(("", Float(-500.98))));
+        assert_eq!(float("-127.."), Ok(("..", Float(-127.0))));
+        assert_eq!(float("abc"), Err(make_nom_error("abc", ErrorKind::OneOf)));
+        //assert_eq!(
+        //    float("9223372036854775808"),
+        //    Err(make_nom_error("9223372036854775808", ErrorKind::MapRes))
+        //);
     }
 }
