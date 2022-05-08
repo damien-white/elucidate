@@ -1,16 +1,19 @@
-//! [`elucidate`][elucidate-repo] provides an intuitive API for efficiently and
-//! correctly parsing arbitrary JSON data.
+//! High-performance JSON parsing for safety-critical systems.
 //!
-//! # NOTE: This software is very unstable. Use at your own risk.
-//! __This warning will be removed once the public API is considered stable
-//! enough to be useful.__
+//! `elucidate` uses a suite of safe, resource-efficient JSON parsing routines to
+//! sanitize arbitrary and untrusted data. It provides an intuitive and easy-to-use
+//! API for operating on JSON data without sacrificing performance.
 //!
-//! The primary goals of this project are:
-//! 1. Performant at runtime — high speed and efficient with resources
-//! 2. Memory-safe with limited to no usages of `unsafe`
-//! 3. Provide intuitive APIs for parsing JSON into useful, structured data.
+//! # Stability
 //!
-//! [elucidate-repo]: https://github.com/dark-fusion/elucidate
+//! ***This crate is not ready for use in a production system**
+//!
+//! Breaking changes to the API may be introduced at any time.
+//!
+//! Upcoming changes can be found in the project's [change log][CHANGELOG].
+//!
+//! [CHANGELOG]: https://github.com/dark-fusion/elucidate/CHANGELOG.md
+
 use nom::branch::alt;
 use nom::bytes::streaming::tag;
 use nom::character::streaming::{digit0, one_of};
@@ -20,7 +23,10 @@ use nom::IResult;
 
 use Value::*;
 
-#[derive(Clone, Debug, PartialEq)]
+/// Tree-like data structure representing a JSON value.
+///
+/// The `Value` enum is used to map JSON values to well-formed Rust types.
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Value {
     Boolean(bool),
     Integer(i64),
@@ -43,12 +49,16 @@ pub fn null(input: &str) -> IResult<&str, Value> {
 
 // Parses a JSON **number** as an `integer` value.
 // pub fn integer(input: &str) -> IResult<&str, Value> {}
+// TODO: Finish these parsers / chain the steps together
 
+/// Parses an unsigned integer value.
 #[allow(unused)]
 pub(crate) fn unsigned_integer(input: &str) -> IResult<&str, &str> {
     alt((tag("0"), recognize(pair(nonzero_digit, digit0))))(input)
 }
 
+/// Parses a non-zero digit from 0-9, returning a `char`.
+#[allow(unused)]
 pub(crate) fn nonzero_digit(input: &str) -> IResult<&str, char> {
     one_of("123456789")(input)
 }

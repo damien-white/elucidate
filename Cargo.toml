@@ -2,10 +2,13 @@
 name = "elucidate"
 version = "0.1.0"
 edition = "2021"
-description = "High-performance JSON parser for correctly handling arbitrary data"
-repository = "https://github.com/dark-fusion/elucidate"
-license = "MIT"
 authors = ["Peter Donovan <peter@darkfusion.io>"]
+description = "High-performance JSON parsing for safety-critical systems."
+repository = "https://github.com/dark-fusion/elucidate"
+readme = "README.md"
+license = "MIT"
+keywords = ["json", "parser", "secure"]
+categories = ["parsing"]
 
 [dependencies]
 nom = "7.1.1"
@@ -16,11 +19,9 @@ lto = true
 codegen-units = 1
 
 [profile.dev]
-# Disabling debug info speeds up builds a bunch,
-# and we don't rely on it for debugging that much.
+# Disabling debug info speeds up build times during development.
+# Comment out the following line to re-enable debug info.
 debug = 0
-# For faster builds on MacOS with incremental building enabled
-split-debuginfo = "unpacked"
 
 [profile.release]
 incremental = true

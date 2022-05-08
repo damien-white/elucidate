@@ -1,47 +1,45 @@
 <div align="center">
   <h1>elucidate</h1>
+  <h3>High-performance JSON parsing for safety-critical systems</h3>
 
 [![Crates.io](https://img.shields.io/crates/v/elucidate.svg)](https://crates.io/crates/elucidate)
 [![Docs.rs](https://docs.rs/elucidate/badge.svg)](https://docs.rs/elucidate)
 [![CI](https://github.com/dark-fusion/elucidate/workflows/CI/badge.svg)](https://github.com/dark-fusion/elucidate/actions)
 [![Coverage Status](https://coveralls.io/repos/github/dark-fusion/elucidate/badge.svg?branch=main)](https://coveralls.io/github/dark-fusion/elucidate?branch=main)
 
-</div>
-
-`elucidate` is a high-performance JSON parser for correctly handling arbitrary data.
-
 The official documentation can be found in the [crate's documentation][docs-rs].
 
-## Project Description
+</div>
 
-Since the project is currently in very early development, some things are naturally in flux. The
-goals of the project at this time are aimed around allowing end-users to:
+## Description
 
-- Create custom JSON data pipelines
-- Validate and transform JSON data
-- Securely handle untrusted data without accidentally executing malicious code
+`elucidate` uses a suite of safe, resource-efficient JSON parsing routines to sanitize arbitrary and
+untrusted data. It provides an intuitive and easy-to-use API for operating on JSON data without
+sacrificing performance.
 
 ### JSON Syntax
 
 The specification that defines valid JSON syntax and the format itself can be found
 within [IETF RFC 8259][rfc-8259].
 
-## Feature Roadmap
+## Feature list
 
-The following list of features is basic and represents what is required for a minimally-viable
-product (MVP). The scope of the project is intentionally as small as possible.
+The following list represents a mostly-complete list of features that will be present in the MVP:
 
-- [ ] Parse JSON data types as defined in [RFC 8259][rfc-8259].
-    - [ ] array
-    - [X] boolean
-    - [X] null
-    - [ ] number
-    - [ ] object
-    - [ ] string
-- [ ] Handle structured data such as `Record` entries (key-value pairs)
-- [ ] Convert, transform or normalize strings containing escape codes
+- [ ] Parse all valid JSON syntax and data types as defined within [RFC 8259][rfc-8259].
+    - [ ] Primitive types
+        - [X] `boolean`
+        - [X] `null`
+        - [ ] `number`
+        - [ ] `string`
+    - [ ] Structural types
+        - [ ] `array`
+        - [ ] `object`
+- [ ] Handle nested, structured data such as key-value pairs
+- [ ] Normalize and/or transform string types that are not valid in Rust into strings it can
+  understand
 - [ ] Create **Reader** and **Writer** APIs
-    - [ ] Implement async-compatible extension traits
+    - [ ] Async-compatible APIs via trait implementations or extensions
 
 ## Design Choices
 

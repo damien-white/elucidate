@@ -17,7 +17,7 @@ _default:
 
 # Build the documentation for the crate
 @doc:
-    cargo +nightly doc --no-deps --document-private-items --all-features --workspace --verbose
+    cargo doc --no-deps --document-private-items --all-features --workspace --verbose
 
 # Format the project with rustfmt
 @format:
@@ -26,7 +26,7 @@ _default:
 
 # Quickly format and run linter
 @lint:
-    cargo clippy && echo "   *** [Linter finished successfully] ***"
+    cargo +nightly clippy && echo "   *** [Linter finished successfully] ***"
 
 # Run code-quality and CI-related tasks locally
 @pre-commit:

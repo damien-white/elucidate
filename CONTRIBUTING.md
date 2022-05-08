@@ -1,9 +1,15 @@
 # Contribution guidelines
 
-First off, thank you for considering contributing to elucidate.
+Thank you for considering contributing to `elucidate`!
 
-If your contribution is not straightforward, please first discuss the change you
-wish to make by creating a new issue before making the change.
+To ensure that your contribution is accepted and merged as painlessly as possible, we ask that you
+please follow a few simple steps:
+
+1. Open a new ticket, describing the changes you would like to make.
+2. Participate in any discussions if your changes are non-trivial or unclear.
+3. Briefly outline any potential breaking changes that would happen as a result of your
+   contribution.
+    1. If you are not sure about this part, that is okay. We'll figure it out!
 
 ## Reporting issues
 
@@ -39,7 +45,7 @@ If the required subsection does not exist yet under **Unreleased**, create it!
 
 ### Set up
 
-This is no different than other Rust projects.
+This is no different from other Rust projects.
 
 ```shell
 git clone https://github.com/dark-fusion/elucidate
