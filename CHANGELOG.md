@@ -21,13 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Nightly toolchain docs generation; `cargo doc` now uses the latest stable toolchain.
+- "assets" directory containing artifacts from a different project.
 
 ## [0.1.0] - 2021-05-06
 
 ### Added
 
 - First release.
-- Project template with basic CI/CD workflows and [README](/README.md).
+- Project template with basic CI/CD workflows and project README.
 - Documentation targeted at end-users for interacting with repository.
     - Includes topics such as how to open new issues, request features, and report bugs.
 
