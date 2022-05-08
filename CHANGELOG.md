@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Full test coverage for all existing parser functions.
+- Helper function (currently within the test module) for creating `nom` errors
 - Custom Rust compiler flags including platform-specific linker configurations.
 
 ### Changed
@@ -17,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modified `Value` enum members to reflect the currently supported JSON data types.
 - Crate-level documentation to accurately reflect the purpose of the library.
 - Made the README more succinct, improving readability and clarity.
+
+### Fixed
+
+- The `unsigned_integer` parser is working as intended.
+    - Source: https://docs.rs/nom/latest/nom/character/streaming/fn.digit0.html
 
 ### Removed
 
