@@ -14,13 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Rust treats these types differently, so `Integer` and `Float` are handled separately.
 - Full test coverage for all existing parser functions.
 - Helper function (currently within the test module) for creating `nom` errors.
-- Custom Rust compiler flags including platform-specific linker configurations.
+- Cargo configuration file with Rust compiler flags.
+    - Includes platform-specific linker configurations.
+- Assets directory containing a project logo in SVG and PNG format.
+- Reference to the full JSON grammar to consolidate the syntax rules and enhance documentation.
 
 ### Changed
 
 - Modified `Value` enum members to reflect the currently supported JSON data types.
 - Crate-level documentation to accurately reflect the purpose of the library.
-- Made the README more succinct, improving readability and clarity.
+- The README is more succinct in some places and more expansive in others.
+    - The project README should be clear and readable.
 
 ### Fixed
 
@@ -31,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nightly toolchain docs generation; `cargo doc` now uses the latest stable toolchain.
 - "assets" directory containing artifacts from a different project.
+- Attribution section from README until we find a better place for it.
 
 ## [0.1.0] - 2021-05-06
 
