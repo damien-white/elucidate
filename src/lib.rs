@@ -59,7 +59,7 @@ pub fn integer(input: &str) -> IResult<&str, Value> {
 /// Parses a JSON `number` as a **float** value.
 ///
 /// FIXME: `recognize_float` with another library is recommended for parsing floats
-/// See: https://github.com/Geal/nom/blob/main/CHANGELOG.md#changed-1
+/// Source: <https://github.com/Geal/nom/blob/main/CHANGELOG.md#changed-1>
 pub fn float(input: &str) -> IResult<&str, Value> {
     map_res(recognize_float, |val: &str| val.parse().map(Float))(input)
 }

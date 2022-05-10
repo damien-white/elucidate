@@ -33,6 +33,7 @@ _default:
     cargo fmt --all -- --check
     cargo clippy -- --D warnings
     cargo test
+    cargo doc --no-deps --document-private-items --all-features --workspace --verbose
 
 # Run tests with 'nocapture' and 'quiet' flags set
 @test:
