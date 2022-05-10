@@ -22,14 +22,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Modified `Value` enum members to reflect the currently supported JSON data types.
+- Use `recognize_float` to greatly simplify the `float` parser logic.
 - Crate-level documentation to accurately reflect the purpose of the library.
 - The README is more succinct in some places and more expansive in others.
     - The project README should be clear and readable.
+- Functions are now private instead of public within their crate where possible.
 
 ### Fixed
 
 - The `unsigned_integer` parser is working as intended.
     - Source: https://docs.rs/nom/latest/nom/character/streaming/fn.digit0.html
+- Inaccurate documentation for the non-zero integer function.
 
 ### Removed
 

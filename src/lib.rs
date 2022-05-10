@@ -16,9 +16,10 @@
 
 use nom::branch::alt;
 use nom::bytes::complete::tag;
-use nom::character::complete::{digit0, digit1, one_of};
+use nom::character::complete::{digit0, one_of};
 use nom::combinator::{map_res, opt, recognize, value};
-use nom::sequence::{pair, tuple};
+use nom::number::complete::recognize_float;
+use nom::sequence::pair;
 use nom::IResult;
 
 use Value::*;
@@ -51,37 +52,30 @@ pub fn null(input: &str) -> IResult<&str, Value> {
 pub fn integer(input: &str) -> IResult<&str, Value> {
     map_res(
         recognize(pair(opt(tag("-")), unsigned_integer)),
-        |val: &str| val.parse::<i64>().map(Integer),
+        |val: &str| val.parse().map(Integer),
     )(input)
 }
 
-// Parses a JSON `number` as a **float** value.
+/// Parses a JSON `number` as a **float** value.
+///
+/// FIXME: `recognize_float` with another library is recommended for parsing floats
+/// See: https://github.com/Geal/nom/blob/main/CHANGELOG.md#changed-1
 pub fn float(input: &str) -> IResult<&str, Value> {
-    map_res(
-        recognize(tuple((
-            opt(tag("-")),
-            unsigned_integer,
-            opt(recognize(pair(tag("."), digit1))),
-            opt(recognize(tuple((tag("e"), opt(alt((tag("-"), tag("+")))))))),
-        ))),
-        |val: &str| val.parse().map(Float),
-    )(input)
+    map_res(recognize_float, |val: &str| val.parse().map(Float))(input)
 }
 
 /// Parses an unsigned integer value.
-pub(crate) fn unsigned_integer(input: &str) -> IResult<&str, &str> {
+fn unsigned_integer(input: &str) -> IResult<&str, &str> {
     alt((tag("0"), recognize(pair(nonzero_digit, digit0))))(input)
 }
 
-/// Parses a non-zero digit from 0-9, returning a `char`.
-pub(crate) fn nonzero_digit(input: &str) -> IResult<&str, char> {
+/// Parses a non-zero digit from 1-9, returning a `char`.
+fn nonzero_digit(input: &str) -> IResult<&str, char> {
     one_of("123456789")(input)
 }
 
 #[cfg(test)]
 mod tests {
-    use std::assert_eq;
-
     use nom::error::{Error, ErrorKind};
     use nom::Err;
 
@@ -146,14 +140,15 @@ mod tests {
     #[test]
     fn parses_float_values() {
         assert_eq!(float("456.7xyz"), Ok(("xyz", Float(456.7))));
-        assert_eq!(float("00000XXX"), Ok(("0000XXX", Float(0.0000))));
-        assert_eq!(float("0123456789xyz"), Ok(("123456789xyz", Float(0.0))));
+        assert_eq!(float("0.0000XXX"), Ok(("XXX", Float(0.0000))));
+        assert_eq!(float("0123456789xyz"), Ok(("xyz", Float(123456789.0))));
         assert_eq!(float("-500.98"), Ok(("", Float(-500.98))));
-        assert_eq!(float("-127.."), Ok(("..", Float(-127.0))));
-        assert_eq!(float("abc"), Err(make_nom_error("abc", ErrorKind::OneOf)));
-        //assert_eq!(
-        //    float("9223372036854775808"),
-        //    Err(make_nom_error("9223372036854775808", ErrorKind::MapRes))
-        //);
+
+        assert_eq!(float("1e+7qwerty"), Ok(("qwerty", Float(10_000_000.0))));
+        assert_eq!(float("abc"), Err(make_nom_error("abc", ErrorKind::Char)));
+        assert_eq!(
+            float("9223372036854775808"),
+            Ok(("", Float(9.223372036854776e18)))
+        );
     }
 }
