@@ -9,9 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Parsers for extracting the `number` data type into `Integer` and `Float` types.
+- Parser for extracting the `number` data type.
     - JSON makes no distinction between signed, unsigned and float values.
-    - Rust treats these types differently, so `Integer` and `Float` are handled separately.
 - Full test coverage for all existing parser functions.
 - Helper function (currently within the test module) for creating `nom` errors.
 - Cargo configuration file with Rust compiler flags.
@@ -21,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Modified `Value` enum members to reflect the currently supported JSON data types.
+- `Value` enum members to reflect the currently supported JSON data types.
 - Use `recognize_float` to greatly simplify the `float` parser logic.
 - Crate-level documentation to accurately reflect the purpose of the library.
 - The README is more succinct in some places and more expansive in others.
@@ -30,15 +29,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- The `unsigned_integer` parser is working as intended.
-    - Source: https://docs.rs/nom/latest/nom/character/streaming/fn.digit0.html
-- Inaccurate documentation for the non-zero integer function.
+- Numbers are now parsed correctly as per the official JSON specification (RFC 8259).
 
 ### Removed
 
 - Nightly toolchain docs generation; `cargo doc` now uses the latest stable toolchain.
 - "assets" directory containing artifacts from a different project.
 - Attribution section from README until we find a better place for it.
+- Support for `Integer` and `Float` values; Support now matches JSON's `Number` type.
+    - The `Number` type is represented as a 64-bit floating point.
+- The `unsigned_integer`, and `integer` parsers.
 
 ## [0.1.0] - 2021-05-06
 
