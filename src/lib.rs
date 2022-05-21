@@ -32,8 +32,11 @@ pub enum Value {
 
 /// Parses a JSON value, using branching to coerce into the correct type.
 pub fn json_value(input: &str) -> IResult<&str, Value> {
-    use Value::*;
-    alt((map(boolean, Boolean), map(number, Number), map(null, Null)))(input)
+    alt((
+        map(boolean, Value::Boolean),
+        map(number, Value::Number),
+        map(null, Value::Null),
+    ))(input)
 }
 
 /// Parses a JSON `boolean` value.
@@ -56,11 +59,22 @@ mod tests {
     use nom::error::{Error, ErrorKind};
     use nom::Err;
 
+    use crate::Value::{Boolean, Null, Number};
+
     use super::*;
 
     // Convenience function for error cases
     fn make_nom_error(input: &str, kind: ErrorKind) -> Err<Error<&str>> {
         Err::Error(Error::new(input, kind))
+    }
+
+    #[test]
+    fn parses_json_value() {
+        assert_eq!(json_value("null"), Ok(("", Null(()))));
+        assert_eq!(json_value("true"), Ok(("", Boolean(true))));
+        assert_eq!(json_value("false"), Ok(("", Boolean(false))));
+        assert_eq!(json_value("-42.42e7"), Ok(("", Number(-42.42e7))));
+        assert_eq!(json_value("-424200000"), Ok(("", Number(-42.42e7))));
     }
 
     #[test]
