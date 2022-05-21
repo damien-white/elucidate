@@ -12,17 +12,12 @@ _default:
 
 # Format, lint and check that project compiles
 @compile:
-    cargo fmt --all
-    cargo clippy -- -D warnings
+    cargo +nightly fmt --all
+    cargo +nightly clippy -- -D warnings
 
 # Build the documentation for the crate
 @doc:
     cargo doc --no-deps --document-private-items --all-features --workspace --verbose
-
-# Format the project with rustfmt
-@format:
-    cargo fmt --all
-    cargo clippy -- --D warnings
 
 # Quickly format and run linter
 @lint:
@@ -30,15 +25,15 @@ _default:
 
 # Run code-quality and CI-related tasks locally
 @pre-commit:
-    cargo fmt --all -- --check
+    cargo +nightly fmt --all -- --check
     cargo clippy -- --D warnings
-    cargo test
+    cargo test --locked
     cargo doc --no-deps --document-private-items --all-features --workspace --verbose
 
 # Run tests with 'nocapture' and 'quiet' flags set
 @test:
-    cargo test -- --nocapture --quiet
+    cargo test --locked -- --nocapture --quiet
 
 # Run tests single-threaded for concurrency-related debugging
 @test-debug:
-    cargo test -- --test-threads=1 --nocapture
+    cargo test --locked -- --test-threads=1 --nocapture

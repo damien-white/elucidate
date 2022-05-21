@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Parser for extracting the `number` data type.
+- Unified `number` data type and parser that includes integer and floating point values.
     - JSON makes no distinction between signed, unsigned and float values.
 - Full test coverage for all existing parser functions.
 - Helper function (currently within the test module) for creating `nom` errors.
 - Cargo configuration file with Rust compiler flags.
     - Includes platform-specific linker configurations.
+    - Support for experimental `mold` linker for Linux (macOS support is buggy)
 - Assets directory containing a project logo in SVG and PNG format.
 - Reference to the full JSON grammar to consolidate the syntax rules and enhance documentation.
 

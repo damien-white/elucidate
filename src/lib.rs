@@ -16,11 +16,9 @@
 
 use nom::branch::alt;
 use nom::bytes::complete::tag;
-use nom::combinator::{map_res, value};
+use nom::combinator::{map, map_res, value};
 use nom::number::complete::recognize_float;
 use nom::IResult;
-
-use Value::*;
 
 /// Tree-like data structure representing a JSON value.
 ///
@@ -29,25 +27,28 @@ use Value::*;
 pub enum Value {
     Boolean(bool),
     Number(f64),
-    Null,
+    Null(()),
+}
+
+/// Parses a JSON value, using branching to coerce into the correct type.
+pub fn json_value(input: &str) -> IResult<&str, Value> {
+    use Value::*;
+    alt((map(boolean, Boolean), map(number, Number), map(null, Null)))(input)
 }
 
 /// Parses a JSON `boolean` value.
-pub fn boolean(input: &str) -> IResult<&str, Value> {
-    alt((
-        value(Boolean(true), tag("true")),
-        value(Boolean(false), tag("false")),
-    ))(input)
+pub fn boolean(input: &str) -> IResult<&str, bool> {
+    alt((value(true, tag("true")), value(false, tag("false"))))(input)
 }
 
 /// Parses a JSON `null` value.
-pub fn null(input: &str) -> IResult<&str, Value> {
-    value(Null, tag("null"))(input)
+pub fn null(input: &str) -> IResult<&str, ()> {
+    value((), tag("null"))(input)
 }
 
 /// Parses a JSON `number` value.
-pub fn float(input: &str) -> IResult<&str, Value> {
-    map_res(recognize_float, |val: &str| val.parse::<f64>().map(Number))(input)
+pub fn number(input: &str) -> IResult<&str, f64> {
+    map_res(recognize_float, str::parse::<f64>)(input)
 }
 
 #[cfg(test)]
@@ -64,15 +65,15 @@ mod tests {
 
     #[test]
     fn parses_null_values() {
-        assert_eq!(null("nullabc"), Ok(("abc", Null)));
+        assert_eq!(null("nullabc"), Ok(("abc", ())));
         assert_eq!(null("()"), Err(make_nom_error("()", ErrorKind::Tag)));
         assert_eq!(null("nul"), Err(make_nom_error("nul", ErrorKind::Tag)));
     }
 
     #[test]
     fn parses_boolean_values() {
-        assert_eq!(boolean("true\"more"), Ok(("\"more", Boolean(true))));
-        assert_eq!(boolean("falseXYZ"), Ok(("XYZ", Boolean(false))));
+        assert_eq!(boolean("true\"more"), Ok(("\"more", true)));
+        assert_eq!(boolean("falseXYZ"), Ok(("XYZ", false)));
         assert_eq!(
             boolean("1234567890"),
             Err(make_nom_error("1234567890", ErrorKind::Tag))
@@ -80,31 +81,28 @@ mod tests {
     }
 
     #[test]
-    fn parses_numbers_without_decimal_point() {
-        assert_eq!(float("4567xyz"), Ok(("xyz", Number(4567.0))));
-        assert_eq!(float("00000XXX"), Ok(("XXX", Number(0.0))));
-        assert_eq!(float("123456789xyz"), Ok(("xyz", Number(123456789.0))));
-        assert_eq!(float("-500abc"), Ok(("abc", Number(-500.0))));
-        assert_eq!(float("abc"), Err(make_nom_error("abc", ErrorKind::Char)));
-        assert_eq!(
-            float("92233e72036854775808"),
-            Ok(("", Number(f64::INFINITY)))
-        );
+    fn parses_integer_values() {
+        assert_eq!(number("4567xyz"), Ok(("xyz", 4567.0)));
+        assert_eq!(number("00000XXX"), Ok(("XXX", 0.0)));
+        assert_eq!(number("123456789xyz"), Ok(("xyz", 123456789.0)));
+        assert_eq!(number("-500abc"), Ok(("abc", -500.0)));
+        assert_eq!(number("abc"), Err(make_nom_error("abc", ErrorKind::Char)));
+        assert_eq!(number("92233e72036854775808"), Ok(("", f64::INFINITY)));
     }
 
     #[test]
-    fn parse_numbers_with_decimal() {
-        assert_eq!(float("456.7xyz"), Ok(("xyz", Number(456.7))));
-        assert_eq!(float("0.0000XXX"), Ok(("XXX", Number(0.0))));
-        assert_eq!(float("0123456789xyz"), Ok(("xyz", Number(123456789.0))));
-        assert_eq!(float("-500.98"), Ok(("", Number(-500.98))));
-        assert_eq!(float("-127."), Ok(("", Number(-127.0))));
-        assert_eq!(float("-12.7.e8"), Ok((".e8", Number(-12.7))));
-        assert_eq!(float("1e+7qwerty"), Ok(("qwerty", Number(10_000_000.0))));
-        assert_eq!(float("abc"), Err(make_nom_error("abc", ErrorKind::Char)));
+    fn parse_floating_point_values() {
+        assert_eq!(number("456.7xyz"), Ok(("xyz", 456.7)));
+        assert_eq!(number("0.0000XXX"), Ok(("XXX", 0.0)));
+        assert_eq!(number("0123456789xyz"), Ok(("xyz", 123456789.0)));
+        assert_eq!(number("-500.98"), Ok(("", -500.98)));
+        assert_eq!(number("-127."), Ok(("", -127.0)));
+        assert_eq!(number("-12.7.e8"), Ok((".e8", -12.7)));
+        assert_eq!(number("1e+7qwerty"), Ok(("qwerty", 10_000_000.0)));
+        assert_eq!(number("abc"), Err(make_nom_error("abc", ErrorKind::Char)));
         assert_eq!(
-            float("9223372036854775808"),
-            Ok(("", Number(9.223372036854776e18)))
+            number("9223372036854775808"),
+            Ok(("", 9.223372036854776e18))
         );
     }
 }
