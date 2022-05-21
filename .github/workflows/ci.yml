@@ -24,10 +24,6 @@ jobs:
           profile: minimal
           override: true
       - uses: Swatinem/rust-cache@v1
-      - name: Install mold linker
-        uses: rui314/setup-mold@v1
-        with:
-          mold-version: 1.2.1
       - uses: actions-rs/cargo@v1
         with:
           command: test
@@ -46,10 +42,6 @@ jobs:
           override: true
           components: rustfmt
       - uses: Swatinem/rust-cache@v1
-      - name: Install mold linker
-        uses: rui314/setup-mold@v1
-        with:
-          mold-version: 1.2.1
       - name: Check formatting
         uses: actions-rs/cargo@v1
         with:
@@ -69,10 +61,6 @@ jobs:
           override: true
           components: clippy
       - uses: Swatinem/rust-cache@v1
-      - name: Install mold linker
-        uses: rui314/setup-mold@v1
-        with:
-          mold-version: 1.2.1
       - name: Clippy check
         uses: actions-rs/cargo@v1
         with:
@@ -91,10 +79,6 @@ jobs:
           profile: minimal
           override: true
       - uses: Swatinem/rust-cache@v1
-      - name: Install mold linker
-        uses: rui314/setup-mold@v1
-        with:
-          mold-version: 1.2.1
       - name: Check documentation
         env:
           RUSTDOCFLAGS: -D warnings
