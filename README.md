@@ -6,7 +6,7 @@
 [![Crates.io](https://img.shields.io/crates/v/elucidate.svg)](https://crates.io/crates/elucidate)
 [![Docs.rs](https://docs.rs/elucidate/badge.svg)](https://docs.rs/elucidate)
 [![CI](https://github.com/dark-fusion/elucidate/workflows/CI/badge.svg)](https://github.com/dark-fusion/elucidate/actions)
-[![Coverage Status](https://coveralls.io/repos/github/dark-fusion/elucidate/badge.svg?branch=main)](https://coveralls.io/github/dark-fusion/elucidate?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/dark-fusion/elucidate/badge.svg)](https://coveralls.io/github/dark-fusion/elucidate)
 
 The official documentation can be found in the [crate's documentation][docs-rs].
 
