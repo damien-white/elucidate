@@ -18,8 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Includes platform-specific linker configurations.
 - Assets directory containing a project logo in SVG and PNG format.
 - Reference to the full JSON grammar to consolidate the syntax rules and enhance documentation.
-- `string` type parsing utilities such as those found in `src/parser/util.rs`
-    - The specialized `whitespace0` combinator
+- `string` type parsing utilities such as those found in `src/parser/util.rs`.
+    - The specialized `whitespace0` combinator.
+- Linting directive to disallow undocumented items with the `#![deny(missing_docs)]` attribute.
 
 ### Changed
 
@@ -32,21 +33,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Project structure changed to give `parser` its own submodule.
     - Top-level parsers for handling JSON data types.
     - Helper functions, modified and new parser combinators for creating domain-specific parsers.
+- Made the test helper function pub(crate) so it can be shared across related modules.
 
 ### Fixed
 
 - Added missing test coverage for the `json_value` parser.
 - Numbers are now parsed correctly as per the official JSON specification (RFC 8259).
+- Added missing documentation.
 
 ### Removed
 
 - Nightly toolchain docs generation; `cargo doc` now uses the latest stable toolchain.
 - "assets" directory containing artifacts from a different project.
 - Attribution section from README until we find a better place for it.
-- Support for `Integer` and `Float` values; Support now matches JSON's `Number` type.
-    - The `Number` type is represented as a 64-bit floating point.
+- Support for `Integer` and `Float` values; recognize JSON `number` type.
+    - The `number` type is represented as a 64-bit floating point.
 - The `unsigned_integer`, and `integer` parsers.
-- Support for experimental `mold` linker for Linux (macOS support is buggy)
+- Support for experimental `mold` linker for Linux (macOS support is buggy).
 
 ## [0.1.0] - 2021-05-06
 

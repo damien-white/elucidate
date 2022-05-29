@@ -13,4 +13,5 @@
 //! Upcoming changes can be found in the project's [change log][CHANGELOG].
 //!
 //! [CHANGELOG]: https://github.com/dark-fusion/elucidate/CHANGELOG.md
+#![deny(missing_docs)]
 pub mod parser;

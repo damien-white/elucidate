@@ -1,3 +1,4 @@
+//! JSON parsers for transforming JSON into Rust data types.
 use nom::{
     branch::alt,
     bytes::complete::tag,
@@ -13,8 +14,11 @@ use crate::parser::util::trim_whitespace;
 /// The `Value` enum is used to map JSON values to well-formed Rust types.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Value {
+    /// JSON `boolean` type.
     Boolean(bool),
+    /// JSON `number` type.
     Number(f64),
+    /// JSON `null` type.
     Null(()),
 }
 
@@ -49,15 +53,11 @@ pub fn number(input: &str) -> IResult<&str, f64> {
 
 #[cfg(test)]
 mod tests {
-    use nom::error::{Error, ErrorKind};
-    use nom::Err;
+    use nom::error::ErrorKind;
+
+    use crate::parser::util::make_nom_error;
 
     use super::*;
-
-    // Convenience function for error cases
-    fn make_nom_error(input: &str, kind: ErrorKind) -> Err<Error<&str>> {
-        Err::Error(Error::new(input, kind))
-    }
 
     #[test]
     fn parses_json_value() {
@@ -71,8 +71,8 @@ mod tests {
     #[test]
     fn parses_null_values() {
         assert_eq!(null("nullabc"), Ok(("abc", ())));
-        assert_eq!(null("()"), Err(make_nom_error("()", ErrorKind::Tag)));
-        assert_eq!(null("nul"), Err(make_nom_error("nul", ErrorKind::Tag)));
+        assert_eq!(null("()"), make_nom_error("()", ErrorKind::Tag));
+        assert_eq!(null("nul"), make_nom_error("nul", ErrorKind::Tag));
     }
 
     #[test]
@@ -81,7 +81,7 @@ mod tests {
         assert_eq!(boolean("falseXYZ"), Ok(("XYZ", false)));
         assert_eq!(
             boolean("1234567890"),
-            Err(make_nom_error("1234567890", ErrorKind::Tag))
+            make_nom_error("1234567890", ErrorKind::Tag)
         );
     }
 
@@ -91,7 +91,7 @@ mod tests {
         assert_eq!(number("00000XXX"), Ok(("XXX", 0.0)));
         assert_eq!(number("123456789xyz"), Ok(("xyz", 123456789.0)));
         assert_eq!(number("-500abc"), Ok(("abc", -500.0)));
-        assert_eq!(number("abc"), Err(make_nom_error("abc", ErrorKind::Char)));
+        assert_eq!(number("abc"), make_nom_error("abc", ErrorKind::Char));
         assert_eq!(number("92233e72036854775808"), Ok(("", f64::INFINITY)));
     }
 
@@ -104,7 +104,7 @@ mod tests {
         assert_eq!(number("-127."), Ok(("", -127.0)));
         assert_eq!(number("-12.7.e8"), Ok((".e8", -12.7)));
         assert_eq!(number("1e+7qwerty"), Ok(("qwerty", 10_000_000.0)));
-        assert_eq!(number("abc"), Err(make_nom_error("abc", ErrorKind::Char)));
+        assert_eq!(number("abc"), make_nom_error("abc", ErrorKind::Char));
         assert_eq!(
             number("9223372036854775808"),
             Ok(("", 9.223372036854776e18))
