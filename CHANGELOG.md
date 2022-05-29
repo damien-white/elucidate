@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Includes platform-specific linker configurations.
 - Assets directory containing a project logo in SVG and PNG format.
 - Reference to the full JSON grammar to consolidate the syntax rules and enhance documentation.
+- `string` type parsing utilities such as those found in `src/parser/util.rs`
+    - The specialized `whitespace0` combinator
 
 ### Changed
 
@@ -27,6 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The README is more succinct in some places and more expansive in others.
     - The project README should be clear and readable.
 - Functions are now private instead of public within their crate where possible.
+- Project structure changed to give `parser` its own submodule.
+    - Top-level parsers for handling JSON data types.
+    - Helper functions, modified and new parser combinators for creating domain-specific parsers.
 
 ### Fixed
 
