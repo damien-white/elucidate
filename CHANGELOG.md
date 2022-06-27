@@ -10,22 +10,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added top-level `json_value` function to parse arbitrary JSON values into Rust types.
-- Unified `number` data type and parser that includes integer and floating point values.
-    - JSON makes no distinction between signed, unsigned and float values.
+- Separate parsers for `Real` and `Integer` numerical values.
+    - `Real` numbers are stored as `f64`.
+    - `Integer` numbers are stored as `i64`.
 - Full test coverage for all existing parser functions.
 - Helper function (currently within the test module) for creating `nom` errors.
 - Cargo configuration file with Rust compiler flags.
     - Includes platform-specific linker configurations.
 - Assets directory containing a project logo in SVG and PNG format.
 - Reference to the full JSON grammar to consolidate the syntax rules and enhance documentation.
-- `string` type parsing utilities such as those found in `src/parser/util.rs`.
+- Helpers and parsing utilities found in the `parser/util` module.
     - The specialized `whitespace0` combinator.
 - Linting directive to disallow undocumented items with the `#![deny(missing_docs)]` attribute.
 
 ### Changed
 
-- `Value` enum members to reflect the currently supported JSON data types.
-- Use `recognize_float` to greatly simplify the `float` parser logic.
+- `Node` enum members to reflect the currently supported JSON data types.
+- Replace built-in `recognize_float` with custom float and integer parser subroutines.
 - Crate-level documentation to accurately reflect the purpose of the library.
 - The README is more succinct in some places and more expansive in others.
     - The project README should be clear and readable.
@@ -37,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Added missing test coverage for the `json_value` parser.
+- Added missing test coverage for the `json` parser.
 - Numbers are now parsed correctly as per the official JSON specification (RFC 8259).
 - Added missing documentation.
 
@@ -46,9 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nightly toolchain docs generation; `cargo doc` now uses the latest stable toolchain.
 - "assets" directory containing artifacts from a different project.
 - Attribution section from README until we find a better place for it.
-- Support for `Integer` and `Float` values; recognize JSON `number` type.
-    - The `number` type is represented as a 64-bit floating point.
-- The `unsigned_integer`, and `integer` parsers.
 - Support for experimental `mold` linker for Linux (macOS support is buggy).
 
 ## [0.1.0] - 2021-05-06
